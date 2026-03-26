@@ -32,13 +32,14 @@ def api(method: str, path: str, body: dict | None = None) -> dict:
 def create_policy():
     print("── Creating policy: block-destructive-shell ──")
     policy = api("POST", "/policies", {
-        "name": "Block Destructive Shell Commands",
+        "policy_id": "block-destructive-shell",
         "description": "Prevent rm -rf, dd, mkfs, and similar destructive commands.",
         "action": "block",
-        "risk_level": "critical",
-        "match_tool": "shell_exec",
-        "match_regex": r"(rm\s+-rf|dd\s+if=|mkfs|format\s+[A-Z]:)",
-        "is_active": True,
+        "severity": "critical",
+        "match_json": {
+            "tool": "shell_exec",
+            "regex": r"(rm\s+-rf|dd\s+if=|mkfs|format\s+[A-Z]:)",
+        },
     })
     policy_id = policy.get("policy_id") or policy.get("id")
     print(f"   Created: {policy_id}")
@@ -62,7 +63,10 @@ def update_policy(policy_id: str):
     print(f"\n── Updating policy {policy_id} ──")
     updated = api("PATCH", f"/policies/{policy_id}", {
         "description": "Block destructive shell + format commands. Updated via cookbook.",
-        "match_regex": r"(rm\s+-rf|dd\s+if=|mkfs|format\s+[A-Z]:|shred\s)",
+        "match_json": {
+            "tool": "shell_exec",
+            "regex": r"(rm\s+-rf|dd\s+if=|mkfs|format\s+[A-Z]:|shred\s)",
+        },
     })
     print(f"   Version: {updated.get('version', '?')}")
 
@@ -77,10 +81,10 @@ def view_versions(policy_id: str):
               f"by {v.get('changed_by', '?')}")
 
 
-# ── Step 5: Toggle and archive ──────────────────────────────────
-def toggle_policy(policy_id: str):
-    print(f"\n── Toggling policy {policy_id} ──")
-    result = api("PATCH", f"/policies/{policy_id}/toggle")
+# ── Step 5: Deactivate a policy ─────────────────────────────────
+def deactivate_policy(policy_id: str):
+    print(f"\n── Deactivating policy {policy_id} ──")
+    result = api("PATCH", f"/policies/{policy_id}", {"is_active": False})
     print(f"   Active: {result.get('is_active', '?')}")
 
 
@@ -95,13 +99,14 @@ def export_policies():
 
 
 # ── Step 7: Audit trail ────────────────────────────────────────
-def audit_trail():
-    print("\n── Recent audit trail ──")
-    trail = api("GET", "/policies/audit/trail")
+def audit_trail(policy_id: str):
+    print(f"\n── Audit trail for {policy_id} ──")
+    trail = api("GET", f"/policies/{policy_id}/audit")
     items = trail if isinstance(trail, list) else trail.get("entries", [])
     for entry in items[:5]:
-        print(f"   {entry.get('timestamp', '?')[:19]} │ "
-              f"{entry.get('action', '?'):10s} │ {entry.get('policy_name', '?')}")
+        print(f"   {entry.get('timestamp', entry.get('changed_at', '?'))[:19]} │ "
+              f"{entry.get('action', entry.get('change_type', '?')):10s} │ "
+              f"{entry.get('policy_id', '?')}")
 
 
 # ── Run ─────────────────────────────────────────────────────────
@@ -115,9 +120,9 @@ if __name__ == "__main__":
     if policy_id:
         update_policy(policy_id)
         view_versions(policy_id)
-        toggle_policy(policy_id)
+        deactivate_policy(policy_id)
         export_policies()
-        audit_trail()
+        audit_trail(policy_id)
 
     print("\n💡 Use this pattern in CI/CD: export policies from staging,")
     print("   review the diff, then import into production.")

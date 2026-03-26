@@ -75,8 +75,8 @@ def check_budget():
     if resp.status_code == 200:
         data = resp.json()
         print(f"\n── Budget Status ──")
-        print(f"   Active agents  : {data.get('active_agents', '?')}")
-        print(f"   Circuit breaker: {data.get('circuit_breaker', '?')}")
+        for key, val in data.items():
+            print(f"   {key}: {val}")
     else:
         print(f"   Budget endpoint returned {resp.status_code}")
 

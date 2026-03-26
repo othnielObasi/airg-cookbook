@@ -25,32 +25,26 @@ def scan_and_report(label: str, text: str):
 
     result = client.scan(text=text)
 
-    # PII findings
-    pii = result.get("pii", [])
-    if pii:
-        print(f"  🔍 PII detected ({len(pii)} entities):")
-        for entity in pii:
-            print(f"     - {entity.get('type', '?')}: "
-                  f"{entity.get('value', '?')[:20]}...")
-    else:
-        print("  ✅ No PII detected")
+    safe = result.get("safe", True)
+    risk = result.get("risk_score", 0)
+    findings = result.get("findings", [])
 
-    # Content moderation
-    moderation = result.get("moderation", {})
-    flagged = moderation.get("flagged", False)
-    if flagged:
-        categories = moderation.get("categories", {})
-        triggered = [k for k, v in categories.items() if v]
-        print(f"  ⚠️  Content flagged: {', '.join(triggered)}")
-    else:
-        print("  ✅ Content clean")
+    print(f"  Safe: {'✅ Yes' if safe else '⚠️  No'}  |  Risk: {risk}/100")
 
-    # Injection detection
-    injection = result.get("injection", {})
-    if injection.get("detected"):
-        print(f"  🛑 Injection detected: {injection.get('category', '?')}")
+    if findings:
+        print(f"  Findings ({len(findings)}):")
+        for f in findings:
+            check = f.get("check", "?")
+            verdict = f.get("result", "?")
+            detail = f.get("detail", "")
+            icon = {"pass": "✅", "fail": "🛑", "warn": "⚠️"}.get(verdict, " ")
+            print(f"     {icon} [{check}] {verdict} — {detail[:70]}")
     else:
-        print("  ✅ No injection detected")
+        print("  ✅ No findings")
+
+    sanitized = result.get("sanitized_text")
+    if sanitized and sanitized != text:
+        print(f"  Sanitized: {sanitized[:80]}...")
 
     return result
 

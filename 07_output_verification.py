@@ -35,9 +35,13 @@ def governed_execute(tool: str, args: dict):
     try:
         pre = client.evaluate(tool=tool, args=args)
         print(f"   Pre-eval : {pre['decision']} (risk: {pre['risk_score']})")
-        action_id = pre.get("action_id", "unknown")
+        action_id = pre.get("action_id")
     except BlockedError as e:
         print(f"   Pre-eval : 🛑 BLOCKED — {e}")
+        return None
+
+    if not action_id:
+        print("   Skipping verification (no action_id in response).")
         return None
 
     # Step 2: Execute the tool
@@ -49,9 +53,11 @@ def governed_execute(tool: str, args: dict):
         post = client.verify(
             action_id=action_id,
             tool=tool,
-            result=output,
+            result={"output": output},
         )
-        print(f"   Verify   : ✅ PASS — {post.get('checks_passed', '?')} checks passed")
+        checks = post.get("findings", [])
+        passed = sum(1 for f in checks if f.get("result") == "pass")
+        print(f"   Verify   : ✅ PASS — {passed}/{len(checks)} checks passed")
         return output
 
     except VerificationError as e:

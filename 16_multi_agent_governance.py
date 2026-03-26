@@ -35,10 +35,10 @@ def agent_call(agent_id: str, tool: str, args: dict, step: int):
         )
         status = decision["decision"]
         risk = decision["risk_score"]
-        chain = decision.get("chain_detected", False)
+        chain = decision.get("chain_pattern")
 
         icon = {"allow": "✅", "review": "⚠️", "block": "🛑"}.get(status, "?")
-        chain_flag = " 🔗 CHAIN" if chain else ""
+        chain_flag = f" 🔗 CHAIN({chain})" if chain else ""
         print(f"       {icon} {status} (risk: {risk}){chain_flag}")
 
         if decision.get("explanation"):

@@ -101,8 +101,8 @@ def ingest_demo_spans():
 
     print(f"── Ingesting {len(spans)} spans (trace: {TRACE_ID}) ──")
     result = client.ingest_spans(spans)
-    print(f"   Accepted: {result.get('accepted', '?')} spans")
-    print(f"   Rejected: {result.get('rejected', 0)} spans")
+    print(f"   Inserted: {result.get('inserted', '?')} spans")
+    print(f"   Skipped : {result.get('skipped', 0)} spans")
     return result
 
 
@@ -117,7 +117,8 @@ def query_traces():
     for t in traces[:3]:
         print(f"   • {t.get('trace_id', '?')[:20]}... "
               f"spans={t.get('span_count', '?')} "
-              f"blocks={t.get('block_count', 0)}")
+              f"gov_decisions={t.get('governance_count', 0)} "
+              f"has_blocks={t.get('has_blocks', False)}")
 
     # Fetch full detail for our trace
     if traces:

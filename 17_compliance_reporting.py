@@ -67,41 +67,30 @@ def show_framework(framework: str):
 
 
 # ── 3. Generate compliance report ──────────────────────────────
-def generate_report(fmt: str = "json"):
-    print(f"\n── Generating compliance report ({fmt}) ──")
-    resp = httpx.get(
-        f"{GOVERNOR_URL}/compliance/report",
-        headers=HEADERS,
-        params={"format": fmt},
-        timeout=30,
-    )
-    resp.raise_for_status()
+def generate_report(clauses):
+    """Generate a compliance summary from local clause data and action history."""
+    print("\n── Generating compliance summary ──")
 
-    if fmt == "json":
-        data = resp.json()
-        filename = "compliance_report.json"
-        with open(filename, "w") as f:
-            json.dump(data, f, indent=2)
+    # Fetch recent actions to cross-reference
+    actions = api("/actions", {"limit": 100})
+    items = actions if isinstance(actions, list) else actions.get("items", [])
+    total = len(items)
+    blocked = sum(1 for a in items if a.get("decision") == "block")
 
-        # Summary
-        summary = data.get("summary", data)
-        print(f"   Total evaluations : {summary.get('total_evaluations', '?')}")
-        print(f"   Blocked actions   : {summary.get('blocked_count', '?')}")
-        print(f"   Compliance score  : {summary.get('compliance_score', '?')}")
+    print(f"   Total evaluations : {total}")
+    print(f"   Blocked actions   : {blocked}")
 
-        # Per-framework coverage
-        coverage = data.get("framework_coverage", {})
-        for fw, pct in coverage.items():
-            bar = "█" * int(pct / 5) + "░" * (20 - int(pct / 5))
-            print(f"   {fw:20s} │ {bar} {pct:.0f}%")
+    # Per-framework clause coverage
+    if clauses:
+        frameworks: dict = {}
+        for c in clauses:
+            fw = c.get("framework", "unknown")
+            frameworks.setdefault(fw, []).append(c)
 
-    else:
-        filename = "compliance_report.csv"
-        with open(filename, "w") as f:
-            f.write(resp.text)
-
-    print(f"   Saved to {filename}")
-    return filename
+        print(f"\n   Framework coverage:")
+        for fw, fw_clauses in sorted(frameworks.items()):
+            count = len(fw_clauses)
+            print(f"   📜 {fw:20s} │ {count} clauses tracked")
 
 
 # ── 4. Show moderation categories ──────────────────────────────
@@ -127,7 +116,7 @@ if __name__ == "__main__":
         for fw in sorted(frameworks)[:2]:
             show_framework(fw)
 
-    generate_report("json")
+    generate_report(clauses)
     show_moderation()
 
     print("\n💡 Schedule this script in CI to generate compliance reports")

@@ -32,7 +32,7 @@ def admin_api(method: str, path: str) -> dict:
 # ── 1. Check current status ────────────────────────────────────
 def check_status():
     status = admin_api("GET", "/admin/status")
-    engaged = status.get("kill_switch_engaged", False)
+    engaged = status.get("kill_switch", False)
     icon = "🔴" if engaged else "🟢"
     print(f"   {icon} Kill switch: {'ENGAGED' if engaged else 'OFF'}")
     return engaged

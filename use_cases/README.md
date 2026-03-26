@@ -1,9 +1,11 @@
 # AIRG Agentic Use Cases
 
-Four production-grade agentic scenarios with step-by-step governance.  
+Ten production-grade agentic scenarios with step-by-step governance.  
 **Run them directly in Google Colab** — click the badge to launch.
 
 ## Quick Launch
+
+### Core Use Cases
 
 | # | Use Case | Open in Colab |
 |---|----------|:---:|
@@ -11,6 +13,17 @@ Four production-grade agentic scenarios with step-by-step governance.
 | 2 | **Research Agent with Kill Switch** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/02_research_agent_killswitch.ipynb) |
 | 3 | **Multi-Agent Chain Detection** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/03_multi_agent_chain_detection.ipynb) |
 | 4 | **Code Gen Agent + Verification** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/04_codegen_agent_verification.ipynb) |
+
+### Critical Edge Cases & Red Team
+
+| # | Use Case | Open in Colab |
+|---|----------|:---:|
+| 5 | **Prompt Injection Red Team** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/05_prompt_injection_red_team.ipynb) |
+| 6 | **Credential & Secret Exfiltration** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/06_credential_exfiltration.ipynb) |
+| 7 | **Privilege Escalation Chain** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/07_privilege_escalation_chain.ipynb) |
+| 8 | **Budget Exhaustion & Rate Limit DoS** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/08_budget_exhaustion_dos.ipynb) |
+| 9 | **HIPAA/GDPR Compliance Under Attack** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/09_hipaa_gdpr_compliance.ipynb) |
+| 10 | **Scope Jailbreak — Unauthorized Tool Discovery** | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/10_scope_jailbreak.ipynb) |
 
 ## Setup (all use cases)
 

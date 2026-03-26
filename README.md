@@ -1,7 +1,7 @@
 # AIRG Cookbook
 
 Practical, runnable recipes showing how to integrate the **AI Runtime Governor**
-into real-world agent systems. Inspired by [OpenAI's Cookbook](https://cookbook.openai.com/).
+into real-world agent systems.
 
 Every recipe is self-contained — copy it, set two env vars, and run.
 

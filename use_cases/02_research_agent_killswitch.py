@@ -137,6 +137,7 @@ class GovernedResearchAgent:
                 self.blocked_calls += 1
 
         except BlockedError:
+            status = "block"
             self.blocked_calls += 1
             print(f"      🛑 BLOCKED")
 

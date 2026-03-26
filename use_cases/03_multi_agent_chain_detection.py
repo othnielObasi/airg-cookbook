@@ -223,7 +223,7 @@ spans = [
         "trace_id": TRACE_ID,
         "span_id": f"span-{secrets.token_hex(4)}",
         "name": "pipeline.run",
-        "kind": "internal",
+        "kind": "chain",
         "agent_id": "pipeline-orchestrator",
         "session_id": SESSION_ID,
         "start_time": now,

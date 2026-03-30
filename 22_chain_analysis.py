@@ -59,7 +59,7 @@ print(f"  recon ({d1['risk_score']}) → creds ({d2['risk_score']}) "
 if d1["risk_score"] < d2["risk_score"] < d3["risk_score"]:
     print("  ✅ Risk correctly escalated across the chain")
 
-if d3["decision"] == "blocked":
+if d3["decision"] == "block":
     print("  🛑 Exfiltration step blocked — chain attack prevented!")
 
 # ── Step 5: Impact assessment — chain patterns ──────────────────

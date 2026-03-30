@@ -31,7 +31,7 @@ print("🔗 Chain Integrity Verification\n")
 verify = httpx.get(f"{url}/surge/v2/verify", headers=headers).json()
 print(f"  Chain intact     : {'✅' if verify['valid'] else '❌'} {verify['valid']}")
 print(f"  Receipts checked : {verify['receipts_checked']}")
-print(f"  Broken links     : {verify['broken_links']}")
+print(f"  Broken links     : {verify.get('first_broken_at', 'None')}")
 
 # ── 3. Get latest receipt and verify individually ───────────────
 print(f"\n{'─'*60}")
@@ -42,7 +42,7 @@ receipts = httpx.get(f"{url}/surge/v2/receipts?limit=1",
 
 if receipts:
     rid = receipts[0]["id"]
-    rv = httpx.get(f"{url}/surge/v2/receipt/{rid}/verify",
+    rv = httpx.get(f"{url}/surge/v2/receipts/{rid}/verify",
                    headers=headers).json()
     print(f"  Receipt ID       : {rid}")
     print(f"  Digest valid     : {'✅' if rv['digest_valid'] else '❌'}")

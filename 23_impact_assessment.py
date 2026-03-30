@@ -21,7 +21,7 @@ headers = {"X-API-Key": os.environ["GOVERNOR_API_KEY"]}
 print("📊 Impact Assessment — 30-Day Report\n")
 
 report = httpx.get(f"{url}/impact/assess", headers=headers).json()
-print(f"  Period          : {report['period_days']} days")
+print(f"  Period          : {report.get('period', '30d')} days")
 print(f"  Total evals     : {report['total_evaluations']}")
 print(f"  Unique agents   : {report['unique_agents']}")
 print(f"  Unique tools    : {report['unique_tools']}")
@@ -30,13 +30,13 @@ print(f"  Unique tools    : {report['unique_tools']}")
 rd = report["risk_distribution"]
 print(f"\n{'─'*60}")
 print("📈 Risk Percentiles\n")
-print(f"  p50 (median) : {rd['p50']}")
+print(f"  p50 (median) : {rd.get('median', rd.get('p50', 'N/A'))}")
 print(f"  p90          : {rd['p90']}")
 print(f"  p95          : {rd.get('p95', 'N/A')}")
 print(f"  p99          : {rd['p99']}")
 
 # ── 3. Decision breakdown ──────────────────────────────────────
-dec = report["decisions"]
+dec = report.get("decision_breakdown", {})
 total = sum(dec.values()) or 1
 print(f"\n{'─'*60}")
 print("📋 Decision Breakdown\n")
@@ -59,7 +59,7 @@ agent_report = httpx.get(f"{url}/impact/assess/agent/{aid}",
                          headers=headers).json()
 print(f"  Agent         : {aid}")
 print(f"  Evaluations   : {agent_report.get('total_evaluations', 'N/A')}")
-print(f"  Avg risk      : {agent_report.get('avg_risk', 'N/A')}")
+print(f"  Avg risk      : {agent_report.get('risk_level', 'N/A')}")
 
 # ── 5. Per-tool assessment ─────────────────────────────────────
 print(f"\n{'─'*60}")
@@ -69,5 +69,5 @@ tool_report = httpx.get(f"{url}/impact/assess/tool/shell_exec",
                         headers=headers).json()
 print(f"  Tool          : shell_exec")
 print(f"  Evaluations   : {tool_report.get('total_evaluations', 'N/A')}")
-print(f"  Avg risk      : {tool_report.get('avg_risk', 'N/A')}")
+print(f"  Avg risk      : {tool_report.get('risk_level', 'N/A')}")
 print(f"  Block rate    : {tool_report.get('block_rate_pct', 'N/A')}%")

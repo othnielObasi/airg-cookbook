@@ -56,6 +56,41 @@ export GOVERNOR_API_KEY=airg_your_key_here
 | 16 | [Multi-Agent Governance](16_multi_agent_governance.py) | Python | Chain detection across cooperating agents |
 | 17 | [Compliance Reporting](17_compliance_reporting.py) | Python | Export EU AI Act & NIST compliance reports |
 
+### Security Deep Dives
+
+| # | Recipe | Language | Description |
+|---|--------|----------|-------------|
+| 18 | [Injection Firewall](18_injection_firewall.py) | Python | Test 6 attack vectors: DAN, unicode, encoded payloads |
+| 19 | [PII Scanner & Redaction](19_pii_scanner.py) | Python | Field-level PII detection with confidence scores |
+| 20 | [Agent Fingerprinting & Drift](20_fingerprinting_drift.py) | Python | Behavioural baselines and drift detection |
+| 21 | [SURGE Receipt Verification](21_receipt_verification.py) | Python | Ed25519-signed receipts and chain integrity |
+| 22 | [Chain Analysis & Patterns](22_chain_analysis.py) | Python | Multi-step attack chain detection |
+| 23 | [Impact Assessment & Reporting](23_impact_assessment.py) | Python | 30-day risk reports with percentiles |
+
+---
+
+## Use Case Notebooks (Google Colab)
+
+Runnable end-to-end scenarios — click the badge to open in Colab.
+
+| # | Use Case | Notebook |
+|---|----------|----------|
+| 1 | Governed Customer Support Agent | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/01_customer_support_agent.ipynb) |
+| 2 | Research Agent Kill Switch | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/02_research_agent_killswitch.ipynb) |
+| 3 | Multi-Agent Chain Detection | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/03_multi_agent_chain_detection.ipynb) |
+| 4 | Codegen Agent Verification | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/04_codegen_agent_verification.ipynb) |
+| 5 | Prompt Injection Red Team | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/05_prompt_injection_red_team.ipynb) |
+| 6 | Credential Exfiltration | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/06_credential_exfiltration.ipynb) |
+| 7 | Privilege Escalation Chain | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/07_privilege_escalation_chain.ipynb) |
+| 8 | Budget Exhaustion DoS | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/08_budget_exhaustion_dos.ipynb) |
+| 9 | HIPAA/GDPR Compliance | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/09_hipaa_gdpr_compliance.ipynb) |
+| 10 | Scope Jailbreak | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/10_scope_jailbreak.ipynb) |
+| 19 | PII Scanner & Redaction | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/19_pii_scanner_redaction.ipynb) |
+| 20 | Agent Fingerprinting & Drift | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/20_fingerprinting_drift.ipynb) |
+| 21 | SURGE Receipt Verification | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/21_surge_receipt_verification.ipynb) |
+| 22 | Chain Analysis & Patterns | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/22_chain_analysis.ipynb) |
+| 23 | Impact Assessment & Reporting | [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/23_impact_assessment.ipynb) |
+
 ---
 
 ## Prerequisites

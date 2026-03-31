@@ -5,6 +5,16 @@ Ten production-grade agentic scenarios with step-by-step governance.
 
 ## Quick Launch
 
+### Enterprise Multi-Org Demos (NEW)
+
+Three complete enterprise scenarios demonstrating how different organizations leverage AIRG to govern their AI agents — from single-agent to agent-to-agent orchestration.
+
+| # | Organization | Agents | Use Case | Open in Colab |
+|---|-------------|:------:|----------|:---:|
+| 1 | **MedAssist AI** (Healthcare) | 1 | Patient intake agent with HIPAA compliance | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/enterprise_demos/org1_healthcare_patient_intake.ipynb) |
+| 2 | **FinGuard** (Fintech) | 2 | Trading + Compliance dual-agent governance | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/enterprise_demos/org2_fintech_dual_agents.ipynb) |
+| 3 | **CyberOps Command** (Security) | 4 | Agent-to-agent autonomous incident response | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/use_cases/enterprise_demos/org3_cyberops_agent_to_agent.ipynb) |
+
 ### Core Use Cases
 
 | # | Use Case | Open in Colab |

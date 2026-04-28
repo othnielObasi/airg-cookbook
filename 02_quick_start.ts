@@ -5,7 +5,7 @@
  *
  *     npm install @othnielobasi/airg-client
  *     export GOVERNOR_URL=https://api.airg.nov-tia.com
- *     export GOVERNOR_API_KEY=airg_...
+ *     export GOVERNOR_API_KEY="<your AIRG account API key>"
  *     npx tsx 02_quick_start.ts
  */
 import { GovernorClient, GovernorBlockedError } from "@othnielobasi/airg-client";

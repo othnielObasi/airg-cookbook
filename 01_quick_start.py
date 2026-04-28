@@ -8,7 +8,7 @@ Evaluates a shell command and prints the decision.
 
     pip install airg-client
     export GOVERNOR_URL=https://api.airg.nov-tia.com
-    export GOVERNOR_API_KEY=airg_...
+    export GOVERNOR_API_KEY="<your AIRG account API key>"
     python 01_quick_start.py
 """
 from airg import AIRG, BlockedError

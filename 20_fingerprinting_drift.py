@@ -8,7 +8,7 @@ risk profiles, and sequence patterns — then alerts when behaviour diverges.
 
     pip install httpx
     export GOVERNOR_URL=https://api.airg.nov-tia.com
-    export GOVERNOR_API_KEY=airg_...
+    export GOVERNOR_API_KEY="<your AIRG account API key>"
     python 20_fingerprinting_drift.py
 """
 from __future__ import annotations

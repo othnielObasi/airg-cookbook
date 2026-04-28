@@ -37,6 +37,7 @@
 import os
 import json
 import secrets
+import httpx
 
 GOVERNOR_URL = os.getenv("GOVERNOR_URL", "https://api.airg.nov-tia.com")
 print(f"✅ Governor URL: {GOVERNOR_URL}")
@@ -235,7 +236,25 @@ print("\n" + "=" * 60)
 print("SESSION SUMMARY")
 print("=" * 60)
 
-actions = client.list_actions(agent_id=AGENT_ID, limit=20)
+def fetch_actions(agent_id=None, limit=20):
+    params = {"limit": limit}
+    if agent_id:
+        params["agent_id"] = agent_id
+    headers = {"Content-Type": "application/json"}
+    api_key = getattr(client, "api_key", None) or os.getenv("GOVERNOR_API_KEY", "")
+    if api_key:
+        headers["X-API-Key"] = api_key
+    r = httpx.get(f"{client.base_url}/actions", headers=headers, params=params, timeout=10)
+    r.raise_for_status()
+    raw = r.json()
+    if isinstance(raw, list):
+        return raw
+    if isinstance(raw, dict):
+        return raw.get("items") or raw.get("actions") or raw.get("data") or []
+    return []
+
+
+actions = fetch_actions(agent_id=AGENT_ID, limit=20)
 print(f"\n  {AGENT_ID} — {len(actions)} total evaluations\n")
 
 stats = {"allow": 0, "block": 0, "review": 0}

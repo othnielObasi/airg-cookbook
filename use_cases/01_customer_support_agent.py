@@ -32,9 +32,9 @@
 import os
 
 # In Google Colab, use Secrets (🔑 icon) or set directly:
-# os.environ["GOVERNOR_API_KEY"] = "your-key"
-# os.environ["GOVERNOR_URL"]     = "https://api.airg.nov-tia.com"
-# os.environ["OPENAI_API_KEY"]   = "your-openai-key"
+# Create an API key in your registered AIRG account, then set GOVERNOR_API_KEY
+# in your environment or Colab Secrets. Set GOVERNOR_URL only for self-hosted AIRG.
+# For the optional LLM step, set OPENAI_API_KEY in your environment too.
 
 GOVERNOR_URL = os.getenv("GOVERNOR_URL", "https://api.airg.nov-tia.com")
 print(f"✅ Governor URL: {GOVERNOR_URL}")
@@ -228,7 +228,25 @@ print("\n" + "=" * 60)
 print("AUDIT TRAIL")
 print("=" * 60)
 
-actions = client.list_actions(agent_id="support-agent-v1", limit=10)
+def fetch_actions(agent_id=None, limit=20):
+    params = {"limit": limit}
+    if agent_id:
+        params["agent_id"] = agent_id
+    headers = {"Content-Type": "application/json"}
+    api_key = getattr(client, "api_key", None) or os.getenv("GOVERNOR_API_KEY", "")
+    if api_key:
+        headers["X-API-Key"] = api_key
+    r = httpx.get(f"{client.base_url}/actions", headers=headers, params=params, timeout=10)
+    r.raise_for_status()
+    raw = r.json()
+    if isinstance(raw, list):
+        return raw
+    if isinstance(raw, dict):
+        return raw.get("items") or raw.get("actions") or raw.get("data") or []
+    return []
+
+
+actions = fetch_actions(agent_id="support-agent-v1", limit=10)
 print(f"\nLast {len(actions)} actions for support-agent-v1:\n")
 for a in actions:
     icon = {"allow": "✅", "block": "🛑", "review": "⚠️"}.get(a.get("decision"), " ")

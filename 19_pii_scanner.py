@@ -8,7 +8,7 @@ see how PII findings boost risk in the evaluation pipeline.
 
     pip install httpx
     export GOVERNOR_URL=https://api.airg.nov-tia.com
-    export GOVERNOR_API_KEY=airg_...
+    export GOVERNOR_API_KEY="<your AIRG account API key>"
     python 19_pii_scanner.py
 """
 from __future__ import annotations

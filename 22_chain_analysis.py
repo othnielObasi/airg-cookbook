@@ -8,7 +8,7 @@ escalating-risk, and block-bypass-retry.
 
     pip install httpx
     export GOVERNOR_URL=https://api.airg.nov-tia.com
-    export GOVERNOR_API_KEY=airg_...
+    export GOVERNOR_API_KEY="<your AIRG account API key>"
     python 22_chain_analysis.py
 """
 from __future__ import annotations

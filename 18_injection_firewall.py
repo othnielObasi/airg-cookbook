@@ -8,7 +8,7 @@ unicode obfuscation, indirect injection, and encoded payloads.
 
     pip install httpx
     export GOVERNOR_URL=https://api.airg.nov-tia.com
-    export GOVERNOR_API_KEY=airg_...
+    export GOVERNOR_API_KEY="<your AIRG account API key>"
     python 18_injection_firewall.py
 """
 from __future__ import annotations

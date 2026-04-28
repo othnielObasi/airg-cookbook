@@ -277,7 +277,25 @@ print("\n" + "=" * 60)
 print("FULL AUDIT TRAIL")
 print("=" * 60)
 
-actions = client.list_actions(limit=20)
+def fetch_actions(agent_id=None, limit=20):
+    params = {"limit": limit}
+    if agent_id:
+        params["agent_id"] = agent_id
+    headers = {"Content-Type": "application/json"}
+    api_key = getattr(client, "api_key", None) or os.getenv("GOVERNOR_API_KEY", "")
+    if api_key:
+        headers["X-API-Key"] = api_key
+    r = httpx.get(f"{client.base_url}/actions", headers=headers, params=params, timeout=10)
+    r.raise_for_status()
+    raw = r.json()
+    if isinstance(raw, list):
+        return raw
+    if isinstance(raw, dict):
+        return raw.get("items") or raw.get("actions") or raw.get("data") or []
+    return []
+
+
+actions = fetch_actions(limit=20)
 print(f"\nLast {len(actions)} governance decisions:\n")
 for a in actions:
     icon = {"allow": "✅", "block": "🛑", "review": "⚠️"}.get(a.get("decision"), " ")

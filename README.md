@@ -7,7 +7,7 @@ Every recipe is self-contained — copy it, set two env vars, and run.
 
 ```bash
 export GOVERNOR_URL=https://api.airg.nov-tia.com   # or http://localhost:8000
-export GOVERNOR_API_KEY=airg_your_key_here
+export GOVERNOR_API_KEY="<your AIRG account API key>"
 ```
 
 ---
@@ -121,7 +121,7 @@ and any policy matches — so you can see exactly what AIRG is doing.
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `GOVERNOR_URL` | Yes | Governor API base URL |
-| `GOVERNOR_API_KEY` | Yes | Your API key (`airg_…`) |
+| `GOVERNOR_API_KEY` | Yes | Your API key from your registered AIRG account |
 | `OPENAI_API_KEY` | Recipe 4 only | For OpenAI function calling |
 | `ANTHROPIC_API_KEY` | Recipe 6 only | For Claude tool use |
 

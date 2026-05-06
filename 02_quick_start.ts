@@ -1,7 +1,10 @@
 /**
- * Recipe 02 — Quick Start (TypeScript)
- * =====================================
- * Same as Recipe 01, but in TypeScript.
+ * Recipe 02 - Quick Start (TypeScript)
+ * ====================================
+ * Create an AIRG SDK client and evaluate two tool calls.
+ *
+ * GovernorClient reads GOVERNOR_URL and GOVERNOR_API_KEY from the environment
+ * unless you pass explicit config to the constructor.
  *
  *     npm install @othnielobasi/airg-client
  *     export GOVERNOR_URL=https://api.airg.nov-tia.com
@@ -11,21 +14,27 @@
 import { GovernorClient, GovernorBlockedError } from "@othnielobasi/airg-client";
 
 const gov = new GovernorClient();
+const context = {
+  agent_id: "quickstart-ts-agent",
+  session_id: "quickstart-ts-demo",
+};
 
-// ── 1. Evaluate a low-risk tool call ─────────────────────────
-const safe = await gov.evaluate("read_file", { path: "/tmp/report.csv" });
-console.log(`✅  Decision : ${safe.decision}`);
-console.log(`    Risk     : ${safe.risk_score}`);
-console.log(`    Reason   : ${safe.explanation}`);
+const safe = await gov.evaluate("read_file", { path: "/tmp/report.csv" }, context);
+console.log("Safe tool call");
+console.log(`  Decision   : ${safe.decision}`);
+console.log(`  Risk       : ${safe.risk_score}/100`);
+console.log(`  Explanation: ${safe.explanation}`);
 
-// ── 2. Evaluate a high-risk tool call ────────────────────────
 try {
-  const risky = await gov.evaluate("shell_exec", { command: "rm -rf /" });
-  console.log(`\n⚠️  Decision : ${risky.decision}`);
+  const risky = await gov.evaluate("shell_exec", { command: "rm -rf /" }, context);
+  console.log("\nHigh-risk tool call");
+  console.log(`  Decision   : ${risky.decision}`);
 } catch (err) {
   if (err instanceof GovernorBlockedError) {
-    console.log(`\n🛑  BLOCKED  : ${err.message}`);
-    console.log("    The Governor prevented a dangerous operation.");
+    console.log("\nHigh-risk tool call");
+    console.log("  Decision   : block");
+    console.log("  Result     : AIRG prevented execution");
+    console.log(`  Detail     : ${err.message}`);
   } else {
     throw err;
   }

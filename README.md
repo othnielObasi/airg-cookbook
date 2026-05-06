@@ -1,9 +1,13 @@
 # AIRG Cookbook
 
-Practical, runnable recipes showing how to integrate the **AI Runtime Governor**
-into real-world agent systems.
+Implementation recipes for integrating the **AI Runtime Governor** into
+agent applications, tool-calling frameworks, and operational governance
+workflows.
 
-Every recipe is self-contained — copy it, set two env vars, and run.
+The examples show where AIRG belongs in an agent architecture: immediately
+before a tool, function, API call, file operation, or other external action is
+executed. Each recipe is self-contained and uses account-specific credentials
+from environment variables.
 
 ```bash
 export GOVERNOR_URL=https://api.airg.nov-tia.com   # or http://localhost:8000
@@ -18,8 +22,8 @@ export GOVERNOR_API_KEY="<your AIRG account API key>"
 
 | # | Recipe | Language | Description |
 |---|--------|----------|-------------|
-| 1 | [Quick Start](01_quick_start.py) | Python | Your first `evaluate()` call in 10 lines |
-| 2 | [Quick Start (TypeScript)](02_quick_start.ts) | TypeScript | Same thing, TypeScript edition |
+| 1 | [Quick Start](01_quick_start.py) | Python | Create an AIRG client and evaluate safe vs blocked tool calls |
+| 2 | [Quick Start (TypeScript)](02_quick_start.ts) | TypeScript | Same client pattern using the TypeScript SDK |
 
 ### Agent Framework Integrations
 
@@ -105,6 +109,36 @@ Some recipes use additional libraries (noted in each file):
 - `openai` — Recipe 4
 - `crewai` — Recipe 5
 - `anthropic` — Recipe 6
+
+## AIRG Client Initialization
+
+In Python examples, `AIRG()` is the SDK client from the `airg-client` package:
+
+```python
+from airg import AIRG
+
+client = AIRG()
+```
+
+By default, `AIRG()` reads:
+
+| Variable | Purpose |
+|----------|---------|
+| `GOVERNOR_URL` | AIRG API base URL, for example `https://api.airg.nov-tia.com` |
+| `GOVERNOR_API_KEY` | API key from your registered AIRG account |
+
+The client sends evaluation requests to AIRG. The most important method is:
+
+```python
+decision = client.evaluate(
+    tool="read_file",
+    args={"path": "/tmp/report.csv"},
+    context={"agent_id": "example-agent", "session_id": "session-123"},
+)
+```
+
+`decision` contains the runtime governance result: `allow`, `review`, or
+`block`, plus the risk score and explanation fields.
 
 ## Framework Integration Pattern
 

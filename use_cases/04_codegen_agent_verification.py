@@ -59,7 +59,7 @@ def generate_code(prompt: str) -> str:
     examples = {
         "sort a list": 'data = [3, 1, 4, 1, 5]\nresult = sorted(data)\nprint(f"Sorted: {result}")',
         "read csv": 'import csv\nwith open("data.csv") as f:\n    reader = csv.reader(f)\n    for row in reader:\n        print(row)',
-        "api key": 'import os\n# WARNING: hardcoded secret!\nAPI_KEY = "sk-proj-XXXXXXXXXXXXXXXXXXXXXXXX"\nprint(f"Key: {API_KEY}")',
+        "api key": 'import os\n# WARNING: hardcoded secret!\nAPI_KEY = "EXAMPLE_API_KEY_DO_NOT_USE"\nprint(f"Key: {API_KEY}")',
         "delete files": 'import shutil\nshutil.rmtree("/important/data")\nprint("Deleted!")',
         "env secrets": 'import os\nfor k, v in os.environ.items():\n    if "KEY" in k or "SECRET" in k:\n        print(f"{k}={v}")',
         "http request": 'import urllib.request\nresp = urllib.request.urlopen("https://httpbin.org/get")\nprint(resp.read().decode())',

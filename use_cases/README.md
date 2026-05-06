@@ -41,12 +41,24 @@ Three complete enterprise scenarios demonstrating how different organizations le
 pip install airg-client httpx
 ```
 
-Set your environment variables (or use Colab Secrets 🔑):
+Set your environment variables, or add `GOVERNOR_API_KEY` to Colab Secrets (key icon):
 
 ```python
 import os
-os.environ["GOVERNOR_API_KEY"] = "your-api-key"
-os.environ["GOVERNOR_URL"]     = "https://api.airg.nov-tia.com"
+
+try:
+    from google.colab import userdata
+    os.environ["GOVERNOR_API_KEY"] = userdata.get("GOVERNOR_API_KEY") or ""
+except Exception:
+    pass
+
+os.environ.setdefault("GOVERNOR_URL", "https://api.airg.nov-tia.com")
+
+if not os.getenv("GOVERNOR_API_KEY"):
+    raise RuntimeError(
+        "Missing GOVERNOR_API_KEY. Create an API key in your registered AIRG "
+        "account and add it to Colab Secrets or your local environment."
+    )
 ```
 
 ---

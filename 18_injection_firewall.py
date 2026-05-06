@@ -43,12 +43,18 @@ for label, payload in attacks:
     })
     d = r.json()
 
-    icon = "🛑" if d["decision"] == "blocked" else "⚠️"
+    icon = "🛑" if d["decision"] == "block" else "⚠️"
     print(f"  {icon} {label}:")
     print(f"    Decision  : {d['decision']}")
     print(f"    Risk      : {d['risk_score']}/100")
     print(f"    Injection : {d.get('injection_detected', False)}")
-    print(f"    Categories: {d.get('injection_categories', [])}")
+    print(f"    Injection Categories: {d.get('injection_categories', [])}")
+    print(f"    Risk Categories     : {d.get('categories', d.get('risk_categories', []))}")
+    for factor in d.get("risk_factors", []):
+        print(
+            f"      - {factor['category']} | {factor['severity']} | "
+            f"{factor['source']}: {factor['message']}"
+        )
     print()
 
 print("✅ All 6 vectors evaluated — check results above.")

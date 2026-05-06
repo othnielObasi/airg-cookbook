@@ -18,58 +18,62 @@ export GOVERNOR_API_KEY="<your AIRG account API key>"
 
 ## Recipes
 
+Every root recipe has a script version and a Google Colab notebook version.
+Use the script for local development and the notebook when you want a
+browser-runnable walkthrough.
+
 ### Getting Started
 
-| # | Recipe | Language | Description |
-|---|--------|----------|-------------|
-| 1 | [Quick Start](01_quick_start.py) | Python | Create an AIRG client and evaluate safe vs blocked tool calls |
-| 2 | [Quick Start (TypeScript)](02_quick_start.ts) | TypeScript | Same client pattern using the TypeScript SDK |
+| # | Recipe | Notebook | Language | Description |
+|---|--------|----------|----------|-------------|
+| 1 | [Quick Start](01_quick_start.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/01_quick_start.ipynb) | Python | Create an AIRG client and evaluate safe vs blocked tool calls |
+| 2 | [Quick Start (TypeScript)](02_quick_start.ts) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/02_quick_start.ipynb) | TypeScript | Same client pattern using the TypeScript SDK |
 
 ### Agent Framework Integrations
 
-| # | Recipe | Language | Description |
-|---|--------|----------|-------------|
-| 3 | [LangChain Tool Wrapper](03_langchain_tool_wrapper.py) | Python | Wrap sync/async LangChain tools; stop on `block` and pause on `review` |
-| 4 | [OpenAI Responses Tool Calling](04_openai_function_calling.py) | Python | Govern OpenAI Responses API function calls before execution |
-| 5 | [CrewAI Governed Agent](05_crewai_governed_agent.py) | Python | CrewAI BaseTool pattern with AIRG pre-execution checks |
-| 6 | [Anthropic Tool Use](06_anthropic_tool_use.py) | Python | Govern Claude's tool_use blocks |
+| # | Recipe | Notebook | Language | Description |
+|---|--------|----------|----------|-------------|
+| 3 | [LangChain Tool Wrapper](03_langchain_tool_wrapper.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/03_langchain_tool_wrapper.ipynb) | Python | Wrap sync/async LangChain tools; stop on `block` and pause on `review` |
+| 4 | [OpenAI Responses Tool Calling](04_openai_function_calling.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/04_openai_function_calling.ipynb) | Python | Govern OpenAI Responses API function calls before execution |
+| 5 | [CrewAI Governed Agent](05_crewai_governed_agent.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/05_crewai_governed_agent.ipynb) | Python | CrewAI BaseTool pattern with AIRG pre-execution checks |
+| 6 | [Anthropic Tool Use](06_anthropic_tool_use.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/06_anthropic_tool_use.ipynb) | Python | Govern Claude's tool_use blocks |
 
 ### Safety & Compliance
 
-| # | Recipe | Language | Description |
-|---|--------|----------|-------------|
-| 7 | [Output Verification](07_output_verification.py) | Python | Verify tool results post-execution |
-| 8 | [PII & Content Scanning](08_pii_content_scanning.py) | Python | Scan user input and agent output |
-| 9 | [Human-in-the-Loop Review](09_human_in_the_loop.py) | Python | Hold execution for human approval |
-| 10 | [Budget & Rate Controls](10_budget_rate_controls.py) | Python | Per-agent spending guardrails |
+| # | Recipe | Notebook | Language | Description |
+|---|--------|----------|----------|-------------|
+| 7 | [Output Verification](07_output_verification.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/07_output_verification.ipynb) | Python | Verify tool results post-execution |
+| 8 | [PII & Content Scanning](08_pii_content_scanning.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/08_pii_content_scanning.ipynb) | Python | Scan user input and agent output |
+| 9 | [Human-in-the-Loop Review](09_human_in_the_loop.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/09_human_in_the_loop.ipynb) | Python | Hold execution for human approval |
+| 10 | [Budget & Rate Controls](10_budget_rate_controls.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/10_budget_rate_controls.ipynb) | Python | Per-agent spending guardrails |
 
 ### Observability & Operations
 
-| # | Recipe | Language | Description |
-|---|--------|----------|-------------|
-| 11 | [Trace Observability](11_trace_observability.py) | Python | Ingest spans, query traces, correlate governance |
-| 12 | [Real-Time SSE Monitoring](12_realtime_sse_monitoring.py) | Python | Live dashboard feed from the event stream |
-| 13 | [Policy as Code](13_policy_as_code.py) | Python | Create, version, and manage policies programmatically |
-| 14 | [Kill Switch & Emergencies](14_kill_switch_emergencies.py) | Python | Automated kill switch patterns |
+| # | Recipe | Notebook | Language | Description |
+|---|--------|----------|----------|-------------|
+| 11 | [Trace Observability](11_trace_observability.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/11_trace_observability.ipynb) | Python | Ingest spans, query traces, correlate governance |
+| 12 | [Real-Time SSE Monitoring](12_realtime_sse_monitoring.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/12_realtime_sse_monitoring.ipynb) | Python | Live dashboard feed from the event stream |
+| 13 | [Policy as Code](13_policy_as_code.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/13_policy_as_code.ipynb) | Python | Create, version, and manage policies programmatically |
+| 14 | [Kill Switch & Emergencies](14_kill_switch_emergencies.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/14_kill_switch_emergencies.ipynb) | Python | Automated kill switch patterns |
 
 ### Advanced
 
-| # | Recipe | Language | Description |
-|---|--------|----------|-------------|
-| 15 | [MCP Server Integration](15_mcp_integration.py) | Python | Use AIRG via the Model Context Protocol |
-| 16 | [Multi-Agent Governance](16_multi_agent_governance.py) | Python | Chain detection across cooperating agents |
-| 17 | [Compliance Reporting](17_compliance_reporting.py) | Python | Export EU AI Act & NIST compliance reports |
+| # | Recipe | Notebook | Language | Description |
+|---|--------|----------|----------|-------------|
+| 15 | [MCP Server Integration](15_mcp_integration.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/15_mcp_integration.ipynb) | Python | Use AIRG via the Model Context Protocol |
+| 16 | [Multi-Agent Governance](16_multi_agent_governance.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/16_multi_agent_governance.ipynb) | Python | Chain detection across cooperating agents |
+| 17 | [Compliance Reporting](17_compliance_reporting.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/17_compliance_reporting.ipynb) | Python | Export EU AI Act & NIST compliance reports |
 
 ### Security Deep Dives
 
-| # | Recipe | Language | Description |
-|---|--------|----------|-------------|
-| 18 | [Injection Firewall](18_injection_firewall.py) | Python | Test 6 attack vectors: DAN, unicode, encoded payloads |
-| 19 | [PII Scanner & Redaction](19_pii_scanner.py) | Python | Field-level PII detection with confidence scores |
-| 20 | [Agent Fingerprinting & Drift](20_fingerprinting_drift.py) | Python | Behavioural baselines and drift detection |
-| 21 | [SURGE Receipt Verification](21_receipt_verification.py) | Python | Ed25519-signed receipts and chain integrity |
-| 22 | [Chain Analysis & Patterns](22_chain_analysis.py) | Python | Multi-step attack chain detection |
-| 23 | [Impact Assessment & Reporting](23_impact_assessment.py) | Python | 30-day risk reports with percentiles |
+| # | Recipe | Notebook | Language | Description |
+|---|--------|----------|----------|-------------|
+| 18 | [Injection Firewall](18_injection_firewall.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/18_injection_firewall.ipynb) | Python | Test 6 attack vectors: DAN, unicode, encoded payloads |
+| 19 | [PII Scanner & Redaction](19_pii_scanner.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/19_pii_scanner.ipynb) | Python | Field-level PII detection with confidence scores |
+| 20 | [Agent Fingerprinting & Drift](20_fingerprinting_drift.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/20_fingerprinting_drift.ipynb) | Python | Behavioural baselines and drift detection |
+| 21 | [SURGE Receipt Verification](21_receipt_verification.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/21_receipt_verification.ipynb) | Python | Ed25519-signed receipts and chain integrity |
+| 22 | [Chain Analysis & Patterns](22_chain_analysis.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/22_chain_analysis.ipynb) | Python | Multi-step attack chain detection |
+| 23 | [Impact Assessment & Reporting](23_impact_assessment.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/23_impact_assessment.ipynb) | Python | 30-day risk reports with percentiles |
 
 ---
 

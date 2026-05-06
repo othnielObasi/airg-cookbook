@@ -1,34 +1,46 @@
 #!/usr/bin/env python3
 """
-Recipe 03 — LangChain Tool Wrapper
-===================================
-Wrap any LangChain tool with AIRG governance so every invocation is
-evaluated before execution.
+Recipe 03 - LangChain Tool Wrapper
+==================================
+Wrap LangChain tools with AIRG so every invocation is evaluated before the
+underlying tool runs.
 
     pip install airg-client langchain langchain-community
+    export GOVERNOR_URL=https://api.airg.nov-tia.com
+    export GOVERNOR_API_KEY="<your AIRG account API key>"
     python 03_langchain_tool_wrapper.py
 """
 from __future__ import annotations
 
-import json
-from typing import Any, Callable
+import secrets
+from typing import Any
 
 from airg import AIRG, BlockedError
 from langchain_core.tools import BaseTool, ToolException
 
 
-# ── Governed wrapper ────────────────────────────────────────────
+SESSION_ID = f"langchain-tools-{secrets.token_hex(4)}"
+
+
+def explain(decision: dict[str, Any]) -> str:
+    categories = decision.get("categories") or decision.get("risk_categories") or []
+    label = f"{decision['decision']} risk={decision['risk_score']}/100"
+    if categories:
+        label += f" categories={','.join(categories)}"
+    return label
+
+
 class GovernedTool(BaseTool):
-    """Wraps any LangChain tool with AIRG pre-execution governance."""
+    """A LangChain BaseTool wrapper with pre-execution AIRG governance."""
 
     inner_tool: BaseTool
     governor: AIRG
     agent_id: str = "langchain-agent"
-
+    session_id: str = SESSION_ID
     name: str = ""
     description: str = ""
 
-    def __init__(self, inner_tool: BaseTool, governor: AIRG, **kwargs):
+    def __init__(self, inner_tool: BaseTool, governor: AIRG, **kwargs: Any):
         super().__init__(
             inner_tool=inner_tool,
             governor=governor,
@@ -37,47 +49,62 @@ class GovernedTool(BaseTool):
             **kwargs,
         )
 
-    def _run(self, *args: Any, **kwargs: Any) -> str:
-        tool_input = kwargs or (args[0] if args else {})
-
-        # ── Pre-execution governance ──
+    def _evaluate(self, tool_input: Any) -> dict[str, Any]:
+        args = tool_input if isinstance(tool_input, dict) else {"input": tool_input}
         try:
             decision = self.governor.evaluate(
                 tool=self.inner_tool.name,
-                args=tool_input if isinstance(tool_input, dict) else {"input": tool_input},
-                context={"agent_id": self.agent_id, "framework": "langchain"},
+                args=args,
+                context={
+                    "agent_id": self.agent_id,
+                    "session_id": self.session_id,
+                    "framework": "langchain",
+                    "allowed_tools": [self.inner_tool.name],
+                },
             )
-            print(f"  ✅ {self.inner_tool.name} → {decision['decision']} "
-                  f"(risk: {decision['risk_score']})")
-        except BlockedError as e:
-            print(f"  🛑 {self.inner_tool.name} → BLOCKED")
-            raise ToolException(f"Governance blocked: {e}")
+        except BlockedError as exc:
+            raise ToolException(f"AIRG blocked {self.inner_tool.name}: {exc}") from exc
 
-        # ── Execute the real tool ──
+        print(f"  AIRG {self.inner_tool.name}: {explain(decision)}")
+
+        if decision["decision"] == "block":
+            raise ToolException("AIRG blocked this tool call. Do not execute it.")
+        if decision["decision"] == "review":
+            raise ToolException("AIRG requires human review before this tool can run.")
+
+        return decision
+
+    def _run(self, *args: Any, **kwargs: Any) -> str:
+        tool_input = kwargs or (args[0] if args else {})
+        self._evaluate(tool_input)
+        return self.inner_tool._run(*args, **kwargs)
+
+    async def _arun(self, *args: Any, **kwargs: Any) -> str:
+        tool_input = kwargs or (args[0] if args else {})
+        self._evaluate(tool_input)
+        if hasattr(self.inner_tool, "_arun"):
+            return await self.inner_tool._arun(*args, **kwargs)
         return self.inner_tool._run(*args, **kwargs)
 
 
-# ── Demo ────────────────────────────────────────────────────────
 if __name__ == "__main__":
     from langchain_community.tools import ShellTool
 
     gov = AIRG()
+    shell = GovernedTool(
+        inner_tool=ShellTool(),
+        governor=gov,
+        agent_id="langchain-shell-agent",
+    )
 
-    # Wrap the shell tool
-    safe_shell = GovernedTool(inner_tool=ShellTool(), governor=gov)
-
-    # Safe command
-    print("─── Safe command ───")
-    try:
-        result = safe_shell.run({"commands": "echo hello"})
-        print(f"  Output: {result}")
-    except ToolException as e:
-        print(f"  Blocked: {e}")
-
-    # Dangerous command
-    print("\n─── Dangerous command ───")
-    try:
-        result = safe_shell.run({"commands": "rm -rf /"})
-        print(f"  Output: {result}")
-    except ToolException as e:
-        print(f"  Blocked: {e}")
+    for label, command in [
+        ("safe command", "echo hello"),
+        ("secret access", "cat ~/.env"),
+        ("destructive command", "rm -rf /"),
+    ]:
+        print(f"\n--- {label} ---")
+        try:
+            result = shell.run({"commands": command})
+            print(f"  Output: {result}")
+        except ToolException as exc:
+            print(f"  Not executed: {exc}")

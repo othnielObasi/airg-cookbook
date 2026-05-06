@@ -25,9 +25,9 @@ export GOVERNOR_API_KEY="<your AIRG account API key>"
 
 | # | Recipe | Language | Description |
 |---|--------|----------|-------------|
-| 3 | [LangChain Tool Wrapper](03_langchain_tool_wrapper.py) | Python | Wrap any LangChain tool with governance |
-| 4 | [OpenAI Function Calling](04_openai_function_calling.py) | Python | Govern OpenAI tool_calls before execution |
-| 5 | [CrewAI Governed Agent](05_crewai_governed_agent.py) | Python | Drop-in AIRG middleware for CrewAI |
+| 3 | [LangChain Tool Wrapper](03_langchain_tool_wrapper.py) | Python | Wrap sync/async LangChain tools; stop on `block` and pause on `review` |
+| 4 | [OpenAI Responses Tool Calling](04_openai_function_calling.py) | Python | Govern OpenAI Responses API function calls before execution |
+| 5 | [CrewAI Governed Agent](05_crewai_governed_agent.py) | Python | CrewAI BaseTool pattern with AIRG pre-execution checks |
 | 6 | [Anthropic Tool Use](06_anthropic_tool_use.py) | Python | Govern Claude's tool_use blocks |
 
 ### Safety & Compliance
@@ -105,6 +105,38 @@ Some recipes use additional libraries (noted in each file):
 - `openai` — Recipe 4
 - `crewai` — Recipe 5
 - `anthropic` — Recipe 6
+
+## Framework Integration Pattern
+
+For OpenAI, LangChain, CrewAI, Anthropic, or any other agent framework, AIRG
+should sit directly before tool execution:
+
+```text
+model / agent proposes tool call
+        ↓
+AIRG evaluates tool + args + context
+        ↓
+allow  → execute the tool
+review → pause, queue, or return a needs-approval tool result
+block  → do not execute the tool
+```
+
+Use `injection_categories` only for injection-specific explanations. For all
+runtime risks, read `categories` / `risk_categories` and `risk_factors`.
+
+Always pass useful context:
+
+```python
+context={
+    "agent_id": "my-agent",
+    "session_id": "session-123",
+    "framework": "openai_responses",  # or langchain, crewai, anthropic
+    "allowed_tools": ["search_web", "write_file"],
+}
+```
+
+This gives AIRG enough information for per-agent policy, traces, chain
+detection, drift, and review workflows.
 
 ## Running a Recipe
 

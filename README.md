@@ -157,7 +157,7 @@ By default, `AIRG()` reads:
 | `GOVERNOR_URL` | AIRG API base URL, for example `https://api.airg.nov-tia.com` |
 | `GOVERNOR_API_KEY` | API key from your registered AIRG account |
 | `AIRG_GATEWAY_URL` | AIRG Gateway base URL, for example `https://gateway.airg.nov-tia.com` |
-| `AIRG_TOKEN` | Optional JWT/API key for admin/operator API recipes |
+| `AIRG_TOKEN` | Optional admin JWT/API key for recipes that create mesh agents or run canaries |
 
 The client sends evaluation requests to AIRG. The most important method is:
 
@@ -238,7 +238,7 @@ and any policy matches — so you can see exactly what AIRG is doing.
 | `GOVERNOR_URL` | Yes | Governor API base URL |
 | `GOVERNOR_API_KEY` | Yes | Your API key from your registered AIRG account |
 | `AIRG_GATEWAY_URL` | Recipes 24-25 | Gateway base URL |
-| `AIRG_TOKEN` | Recipes 26 and 28 | JWT or API key with operator/admin permissions |
+| `AIRG_TOKEN` | Recipes 26 and 28 | Admin JWT or admin account API key for mesh registration and canary run |
 | `OPENAI_API_KEY` | Recipe 4 only | For OpenAI function calling |
 | `ANTHROPIC_API_KEY` | Recipe 6 only | For Claude tool use |
 

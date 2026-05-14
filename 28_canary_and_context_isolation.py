@@ -10,7 +10,7 @@ like "support-agent" and "session-1" without sharing runtime state.
 
     pip install httpx
     export GOVERNOR_URL=https://api.airg.nov-tia.com
-    export AIRG_TOKEN="<operator/admin JWT or API key>"
+    export AIRG_TOKEN="<admin JWT or admin account API key>"
     python 28_canary_and_context_isolation.py
 """
 from __future__ import annotations
@@ -65,7 +65,7 @@ def main() -> None:
     print("\n1) View canary health")
     request("GET", "/admin/canary/status")
 
-    print("\n2) Run an immediate canary self-test")
+    print("\n2) Run an immediate canary self-test (admin-only)")
     request("POST", "/admin/canary/run")
 
     print("\n3) Evaluate with stable context fields")

@@ -4,23 +4,39 @@ Implementation recipes for integrating the **AI Runtime Governor** into
 agent applications, tool-calling frameworks, and operational governance
 workflows.
 
-The examples show where AIRG belongs in an agent architecture: immediately
-before a tool, function, API call, file operation, or other external action is
-executed. Each recipe is self-contained and uses account-specific credentials
-from environment variables.
+The examples show where AIRG belongs in modern agent architecture:
+immediately before a tool, function, API call, file operation, model gateway
+request, agent-to-agent delegation, or other external action is executed.
+Each recipe is self-contained and uses account-specific credentials from
+environment variables.
 
 ```bash
 export GOVERNOR_URL=https://api.airg.nov-tia.com   # or http://localhost:8000
 export GOVERNOR_API_KEY="<your AIRG account API key>"
+export AIRG_GATEWAY_URL=https://gateway.airg.nov-tia.com
 ```
+
+## Current AIRG Surfaces Covered
+
+| Surface | Cookbook Coverage |
+|---------|-------------------|
+| SDK/direct `/actions/evaluate` governance | Recipes 1-23 |
+| Post-execution `/actions/verify` | Recipe 7 |
+| Gateway mode for tools/APIs/MCP-style traffic | Recipe 24 |
+| OpenAI-compatible LLM gateway | Recipe 25 |
+| Controlled agent mesh and `call_agent` governance | Recipe 26 |
+| Multi-hop supervisor -> specialist delegation | Recipe 27 |
+| Canary health and context isolation | Recipe 28 |
 
 ---
 
 ## Recipes
 
-Every root recipe has a script version and a Google Colab notebook version.
-Use the script for local development and the notebook when you want a
-browser-runnable walkthrough.
+Recipes 1-23 have both script and Google Colab notebook versions. Recipes
+24-28 cover the newest production AIRG surfaces and are currently script-first
+so they can track the live gateway, mesh, delegation, and canary APIs quickly.
+Use scripts for local development and notebooks when you want a browser
+runnable walkthrough.
 
 ### Getting Started
 
@@ -63,6 +79,16 @@ browser-runnable walkthrough.
 | 15 | [MCP Server Integration](15_mcp_integration.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/15_mcp_integration.ipynb) | Python | Use AIRG via the Model Context Protocol |
 | 16 | [Multi-Agent Governance](16_multi_agent_governance.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/16_multi_agent_governance.ipynb) | Python | Chain detection across cooperating agents |
 | 17 | [Compliance Reporting](17_compliance_reporting.py) | [Colab](https://colab.research.google.com/github/othnielObasi/airg-cookbook/blob/main/17_compliance_reporting.ipynb) | Python | Export EU AI Act & NIST compliance reports |
+
+### Enterprise Gateway & Multi-Agent Governance
+
+| # | Recipe | Notebook | Language | Description |
+|---|--------|----------|----------|-------------|
+| 24 | [Gateway Mode](24_gateway_mode.py) | Script first | Python | Call approved enterprise upstream routes through AIRG Gateway |
+| 25 | [OpenAI-Compatible Gateway](25_openai_compatible_gateway.py) | Script first | Python | Use AIRG's `/v1/chat/completions` compatible gateway surface |
+| 26 | [Controlled Agent Mesh](26_controlled_agent_mesh.py) | Script first | Python | Register agents and govern `call_agent` with mesh policies |
+| 27 | [Multi-Hop Delegation](27_multi_hop_delegation.py) | Script first | Python | Validate supervisor -> specialist -> tool chains with `parent_action_id` |
+| 28 | [Canary Health & Context Isolation](28_canary_and_context_isolation.py) | Script first | Python | Check detector canaries and pass stable tenant-safe context |
 
 ### Security Deep Dives
 
@@ -130,6 +156,8 @@ By default, `AIRG()` reads:
 |----------|---------|
 | `GOVERNOR_URL` | AIRG API base URL, for example `https://api.airg.nov-tia.com` |
 | `GOVERNOR_API_KEY` | API key from your registered AIRG account |
+| `AIRG_GATEWAY_URL` | AIRG Gateway base URL, for example `https://gateway.airg.nov-tia.com` |
+| `AIRG_TOKEN` | Optional JWT/API key for admin/operator API recipes |
 
 The client sends evaluation requests to AIRG. The most important method is:
 
@@ -176,6 +204,23 @@ context={
 This gives AIRG enough information for per-agent policy, traces, chain
 detection, drift, and review workflows.
 
+For multi-hop delegation recipes, child actions should also carry parent
+correlation fields:
+
+```python
+context={
+    "agent_id": "database-specialist",
+    "session_id": "case-123",
+    "parent_action_id": parent_decision["action_id"],
+    "parent_trace_id": "trace-123",
+    "parent_span_id": "supervisor-delegation",
+}
+```
+
+For controlled mesh recipes, register agents through `/agent-mesh/agents`
+before using `tool="call_agent"`. AIRG blocks unregistered, inactive, or
+unapproved peer calls by default.
+
 ## Running a Recipe
 
 ```bash
@@ -192,6 +237,8 @@ and any policy matches — so you can see exactly what AIRG is doing.
 |----------|----------|-------------|
 | `GOVERNOR_URL` | Yes | Governor API base URL |
 | `GOVERNOR_API_KEY` | Yes | Your API key from your registered AIRG account |
+| `AIRG_GATEWAY_URL` | Recipes 24-25 | Gateway base URL |
+| `AIRG_TOKEN` | Recipes 26 and 28 | JWT or API key with operator/admin permissions |
 | `OPENAI_API_KEY` | Recipe 4 only | For OpenAI function calling |
 | `ANTHROPIC_API_KEY` | Recipe 6 only | For Claude tool use |
 
